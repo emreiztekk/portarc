@@ -15,6 +15,15 @@
         });
     };
   </script>
+   <script>
+    AFRAME.registerComponent('clicker', {
+        init: function() {
+            this.el.addEventListener('click', e => {
+                alert('clicked!');
+            });
+        }
+    });
+    </script>
   <style>
     .buttons {
       position: absolute;
