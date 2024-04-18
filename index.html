@@ -1,70 +1,28 @@
+<html>
 <!DOCTYPE html>
 <html>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <!-- we import arjs version without NFT but with marker + location based support -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <script>
-    window.onload = function () {
-      document
-        .querySelector(".say-hi-button")
-        .addEventListener("click", function () {
-          // here you can change also a-scene or a-entity properties, like
-          // changing your 3D model source, size, position and so on
-          // or you can just open links, trigger actions...
-          alert("Hi there!");
-        });
-    };
-  </script>
-   <script>
+<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+<script src="https://unpkg.com/@ar-js-org/ar.js@3.4.0/aframe/build/aframe-ar.js"></script>
+<script>
     AFRAME.registerComponent('clicker', {
-        init: function() {
+        init: function () {
             this.el.addEventListener('click', e => {
                 alert('clicked!');
             });
         }
     });
-    </script>
-  <style>
-    .buttons {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
+</script>
+<body style="margin : 0px; overflow: hidden;">
+    <a-scene vr-mode-ui="enabled: false" cursor='rayOrigin: mouse' raycaster='near: 0; far: 50000'
+        arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false;' renderer='antialias: true; alpha: true'>
 
-    .say-hi-button {
-      padding: 0.25em;
-      border-radius: 4px;
-      border: none;
-      background: white;
-      color: black;
-      width: 4em;
-      height: 2em;
-    }
-  </style>
-  <body style="margin : 0px; overflow: hidden;">
-    <div class="buttons">
-      <button class="say-hi-button">SAY HI!</button>
-    </div>
-    <a-scene
-    vr-mode-ui="enabled: false"
-    cursor='rayOrigin: mouse'
-    raycaster='near: 0; far: 50000'
-    arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false;'
-    renderer='antialias: true; alpha: true'>
-      <a-marker>
         <a-image id="Uckuyular"
-        src="https://upload.wikimedia.org/wikipedia/commons/6/66/%C3%9C%C3%A7kuyular_Ferry_Terminal%2C_March_2021_%289%29.jpg" 
-        look-at="[gps-camera]" scale="5 5 5"
-        gps-entity-place="latitude: 38.405675204865336; longitude:27.06935934250486;" position="0 2 0"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" clicker></a-image>
-      </a-marker> 
-      <a-camera gps-camera rotation-reader></a-camera> 
+            src="https://upload.wikimedia.org/wikipedia/commons/6/66/%C3%9C%C3%A7kuyular_Ferry_Terminal%2C_March_2021_%289%29.jpg"
+            look-at="[gps-camera]" scale="5 5 5"
+            gps-entity-place="latitude: 38.405675209865336; longitude:27.06935935250486;" position="0 2 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" clicker></a-image>
+
+        <a-camera gps-camera="latitude: 38.405675209865336; longitude: 27.06935935250486;" rotation-reader></a-camera>
     </a-scene>
-  </body>
+</body>
 </html>
