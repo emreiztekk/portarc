@@ -1,0 +1,28 @@
+<html>
+<!DOCTYPE html>
+<html>
+<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+<script src="https://unpkg.com/@ar-js-org/ar.js@3.4.0/aframe/build/aframe-ar.js"></script>
+<script>
+    AFRAME.registerComponent('clicker', {
+        init: function () {
+            this.el.addEventListener('click', e => {
+                alert('clicked!');
+            });
+        }
+    });
+</script>
+<body style="margin : 0px; overflow: hidden;">
+    <a-scene vr-mode-ui="enabled: false" cursor='rayOrigin: mouse' raycaster='near: 0; far: 50000'
+        arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false;' renderer='antialias: true; alpha: true'>
+
+        <a-image id="Uckuyular"
+            src="https://upload.wikimedia.org/wikipedia/commons/6/66/%C3%9C%C3%A7kuyular_Ferry_Terminal%2C_March_2021_%289%29.jpg"
+            look-at="[gps-camera]" scale="5 5 5"
+            gps-entity-place="latitude: 38.405675209865336; longitude:27.06935935250486;" position="0 2 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" clicker></a-image>
+
+        <a-camera gps-camera="latitude: 38.405675209865336; longitude: 27.06935935250486;" rotation-reader></a-camera>
+    </a-scene>
+</body>
+</html>
