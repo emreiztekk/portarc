@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +13,6 @@
 
 <link rel="stylesheet" href="./stylesheets/index.css">
 
-<!-- Dynamically add places from Javascript -->
 <script src="./places.js"></script>
 
 <body style='margin: 0; overflow: hidden;'>
@@ -29,45 +27,22 @@
 		</a-camera>
 	</a-scene>
   <script>
-    window.addEventListener('load', function () {
-        var cameraEl = document.querySelector('a-camera');
-        var initialScale = 1;
-        var initialDistance = null;
-
-        function getDistance(touches) {
-            var dx = touches[0].pageX - touches[1].pageX;
-            var dy = touches[0].pageY - touches[1].pageY;
-            return Math.sqrt(dx * dx + dy * dy);
+    // Listen for gesture pinch event
+    AFRAME.registerComponent('pinch-to-zoom', {
+        init: function () {
+            var lastScale = 1;
+            var camera = this.el;
+            
+            this.el.addEventListener('gesture-pinch', function(event) {
+                // Adjusting camera scale based on pinch gesture
+                var scale = camera.getAttribute('scale');
+                var newScale = lastScale * event.detail.scale;
+                if (newScale > 0) {
+                    camera.setAttribute('scale', { x: newScale, y: newScale, z: newScale });
+                    lastScale = newScale;
+                }
+            });
         }
-
-        function onPinchStart(event) {
-            if (event.touches.length === 2) {
-                initialDistance = getDistance(event.touches);
-                document.addEventListener('touchmove', onPinchMove);
-                document.addEventListener('touchend', onPinchEnd);
-            }
-        }
-
-        function onPinchMove(event) {
-            if (event.touches.length === 2) {
-                var distance = getDistance(event.touches);
-                var scale = initialScale * (distance / initialDistance);
-
-                // Adjusting FOV for zooming
-                var newFOV = 80 / scale;
-                cameraEl.setAttribute('fov', newFOV);
-            }
-        }
-
-        function onPinchEnd(event) {
-            if (event.touches.length < 2) {
-                document.removeEventListener('touchmove', onPinchMove);
-                document.removeEventListener('touchend', onPinchEnd);
-                initialDistance = null;
-            }
-        }
-
-        document.addEventListener('touchstart', onPinchStart);
     });
 </script>
 </body>
