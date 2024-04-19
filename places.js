@@ -101,7 +101,7 @@ window.onload = () => {
                     icon.setAttribute('name', place.name);
                     // icon.setAttribute('src', place.imageURL);
                     icon.setAttribute('src', 'map-marker.png');
-                    
+
                     icon.setAttribute('scale', '20, 20');
 
                     icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
@@ -116,13 +116,19 @@ window.onload = () => {
                         const el = ev.detail.intersection && ev.detail.intersection.object.el;
 
                         if (el && el === ev.target) {
+                            const label = document.createElement('span');
+                            const container = document.createElement('div');
+                            container.setAttribute('id', 'place-label');
+                            
                             const anchor = document.createElement('a');
                             anchor.setAttribute('href', _URL);
                             anchor.setAttribute('target', '_blank'); // Opens the link in a new tab
                             anchor.innerText = name;
-                            container.appendChild(anchor);
+                        
+                            label.appendChild(anchor);
+                            container.appendChild(label);
                             document.body.appendChild(container);
-
+                        
                             setTimeout(() => {
                                 container.parentElement.removeChild(container);
                             }, 1500);
