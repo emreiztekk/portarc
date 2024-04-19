@@ -6,73 +6,88 @@ const loadPlaces = function(coords) {
         {
             name: "İzq",
             location: {
-                lat: 38.42651897376231, // add here latitude if using static data
-                lng: 27.132658844068313, // add here longitude if using static data
-
+                lat: 38.42651897376231, 
+                lng: 27.132658844068313, 
+            }
+        },
+        {
+            name: "Uçkıuyular",
+            location: {
+                lat: 38.405675209865336, 
+                lng: 27.06935935250486, 
+            }
+        },
+        {
+            name: "Göztepe",
+            location: {
+                lat: 38.399571991405416, 
+                lng: 27.083436202065336, 
+            }
+        },
+        {
+            name: "Karantina",
+            location: {
+                lat: 38.40826637555396, 
+                lng: 27.106606027145318, 
+            }
+        },
+        {
+            name: "Konak",
+            location: {
+                lat: 38.418826366849444, 
+                lng: 27.125208834874005, 
+            }
+        },
+        {
+            name: "Pasaport",
+            location: {
+                lat: 38.42892199253736, 
+                lng: 27.13228407441726, 
+            }
+        },
+        {
+            name: "Alsancak",
+            location: {
+                lat: 38.43897576759363, 
+                lng: 27.140762959439844, 
+            }
+        },
+        {
+            name: "Karşıyaka",
+            location: {
+                lat: 38.454830076318316, 
+                lng: 27.12052045655903, 
+            }
+        },
+        {
+            name: "Bostanlı",
+            location: {
+                lat: 38.45202997017321, 
+                lng: 27.09778594157115, 
             }
         },
     ];
 
-    if (method === 'api') {
-        return loadPlaceFromAPIs(coords);
-    }
+    // if (method === 'api') {
+    //     return loadPlaceFromAPIs(coords);
+    // }
 
     return Promise.resolve(PLACES);
-};
-
-// getting places from REST APIs
-function loadPlaceFromAPIs(position) {
-    const params = {
-        radius: 300,    // search places not farther than this value (in meters)
-        clientId: 'HZIJGI4COHQ4AI45QXKCDFJWFJ1SFHYDFCCWKPIJDWHLVQVZ',
-        clientSecret: '',
-        version: '20300101',    // foursquare versioning, required but unuseful for this demo
-    };
-
-    // CORS Proxy to avoid CORS problems
-    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-
-    // Foursquare API
-    const endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
-        &ll=${position.latitude},${position.longitude}
-        &radius=${params.radius}
-        &client_id=${params.clientId}
-        &client_secret=${params.clientSecret}
-        &limit=15
-        &v=${params.version}`;
-    return fetch(endpoint)
-        .then((res) => {
-            return res.json()
-                .then((resp) => {
-                    return resp.response.venues;
-                })
-        })
-        .catch((err) => {
-            console.error('Error with places API', err);
-        })
-};
-
-
+}; 
 window.onload = () => {
-    const scene = document.querySelector('a-scene');
-
-    // first get current user location
-    return navigator.geolocation.getCurrentPosition(function (position) {
-
-        // then use it to load from remote APIs some places nearby
+    const scene = document.querySelector('a-scene');  
+    return navigator.geolocation.getCurrentPosition(function (position) {  
         loadPlaces(position.coords)
             .then((places) => {
                 places.forEach((place) => {
                     const latitude = place.location.lat;
-                    const longitude = place.location.lng;
+                    const longitude = place.location.lng; 
 
-                    // add place icon
                     const icon = document.createElement('a-image');
                     icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
                     icon.setAttribute('name', place.name);
                     icon.setAttribute('src', './map-marker.png');
-
-                    // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
+ 
                     icon.setAttribute('scale', '20, 20');
 
                     icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
