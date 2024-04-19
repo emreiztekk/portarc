@@ -133,7 +133,7 @@ window.onload = () => {
                                 container.parentElement.removeChild(container);
                             }, 1500);
                         }
-                        window.location.replace(_URL);
+                        // window.location.replace(_URL);
                     };
                     icon.addEventListener('click', clickListener);
                     scene.appendChild(icon);
