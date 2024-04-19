@@ -92,7 +92,8 @@ const loadPlaces = function (coords) {
     return Promise.resolve(PLACES);
 };
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the Earth in kilometers
+    // const R = 6371; // Radius of the Earth in kilometers
+    const R = 6371000; // Radius of the Earth in meters
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -117,7 +118,7 @@ window.onload = () => {
 
                     const icon = document.createElement('a-image');
                     icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
-                    icon.setAttribute('name', `${place.name} (${distance} km)`); // Display name with distance
+                    icon.setAttribute('name', `${place.name} (${distance} metre)`); // Display name with distance
                     icon.setAttribute('src', 'map-marker.png');
                     icon.setAttribute('scale', '20, 20');
                     icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
