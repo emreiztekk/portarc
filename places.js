@@ -14,7 +14,7 @@ const loadPlaces = function (coords) {
         {
             name: "Uçkıuyular",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=uckuyular",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.405675209865336,
                 lng: 27.06935935250486,
@@ -23,7 +23,7 @@ const loadPlaces = function (coords) {
         {
             name: "Göztepe",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=goztepe",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.399571991405416,
                 lng: 27.083436202065336,
@@ -41,7 +41,7 @@ const loadPlaces = function (coords) {
         {
             name: "Konak",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=konak",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.418826366849444,
                 lng: 27.125208834874005,
@@ -50,7 +50,7 @@ const loadPlaces = function (coords) {
         {
             name: "Pasaport",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=pasaport",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.42892199253736,
                 lng: 27.13228407441726,
@@ -59,7 +59,7 @@ const loadPlaces = function (coords) {
         {
             name: "Alsancak",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=alsancak",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.43897576759363,
                 lng: 27.140762959439844,
@@ -68,7 +68,7 @@ const loadPlaces = function (coords) {
         {
             name: "Karşıyaka",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=karsiyaka",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.454830076318316,
                 lng: 27.12052045655903,
@@ -77,15 +77,33 @@ const loadPlaces = function (coords) {
         {
             name: "Bostanlı",
             imageURL: "https://images.adsttc.com/media/images/642e/bdcb/400a/e301/7ce2/a832/newsletter/izq-innovation-center-ofisvesaire_1.jpg?1680784917",
-            URL: "https://www.google.com/search?q=bostanlı",
+            URL: "https://www.izdeniz.com.tr/",
             location: {
                 lat: 38.45202997017321,
                 lng: 27.09778594157115,
             }
         },
     ];
+    PLACES.forEach(place => {
+        const distance = calculateDistance(coords.latitude, coords.longitude, place.location.lat, place.location.lng);
+        place.distance = distance;
+    });
+
     return Promise.resolve(PLACES);
 };
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in kilometers
+    return distance.toFixed(2); // Round to 2 decimal places
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
 window.onload = () => {
     const scene = document.querySelector('a-scene');
     return navigator.geolocation.getCurrentPosition(function (position) {
@@ -95,24 +113,20 @@ window.onload = () => {
                     const latitude = place.location.lat;
                     const longitude = place.location.lng;
                     const _URL = place.URL;
+                    const distance = place.distance;
 
                     const icon = document.createElement('a-image');
                     icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
-                    icon.setAttribute('name', place.name);
-                    // icon.setAttribute('src', place.imageURL);
+                    icon.setAttribute('name', `${place.name} (${distance} km)`); // Display name with distance
                     icon.setAttribute('src', 'map-marker.png');
-
                     icon.setAttribute('scale', '20, 20');
-
                     icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
                     const clickListener = function (ev) {
                         ev.stopPropagation();
                         ev.preventDefault();
 
-                        const name = ev.target.getAttribute('name');
-
-
+                        const name = ev.target.getAttribute('name'); 
                         const el = ev.detail.intersection && ev.detail.intersection.object.el;
 
                         if (el && el === ev.target) {
